@@ -8,6 +8,7 @@ import { useSession } from "@/hooks/useSession";
 import { useProfile } from "@/hooks/useProfile";
 import { matchScore, projectMatchScore } from "@/lib/match";
 import { MatchScore } from "@/components/MatchScore";
+import { SkillRadar } from "@/components/SkillRadar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -161,6 +162,11 @@ function ProjectDetail() {
           </p>
         )}
       </div>
+
+      <SkillRadar
+        requiredSkills={roles.flatMap((r) => r.required_skills)}
+        userSkills={profile?.skills}
+      />
 
       <div>
         <h2 className="mb-4 text-xl font-semibold">Roles</h2>
