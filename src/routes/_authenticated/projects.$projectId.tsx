@@ -162,6 +162,11 @@ function ProjectDetail() {
         )}
       </div>
 
+      <SkillRadar
+        requiredSkills={roles.flatMap((r) => r.required_skills)}
+        userSkills={profile?.skills}
+      />
+
       <div>
         <h2 className="mb-4 text-xl font-semibold">Roles</h2>
         <div className="grid gap-4 md:grid-cols-2">
