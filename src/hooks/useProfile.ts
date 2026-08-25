@@ -2,11 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "./useSession";
 
+export type Persona = "student" | "professional" | "researcher";
+
 export type Profile = {
   id: string;
   full_name: string;
+  persona: Persona;
   department: string | null;
   year_of_study: string | null;
+  company: string | null;
+  job_title: string | null;
+  institution: string | null;
+  research_focus: string | null;
   bio: string | null;
   skills: string[];
   weekly_hours: number;

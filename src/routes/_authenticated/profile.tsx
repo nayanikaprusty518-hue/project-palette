@@ -4,12 +4,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/useSession";
-import { useProfile } from "@/hooks/useProfile";
+import { useProfile, type Persona } from "@/hooks/useProfile";
 import { SkillInput } from "@/components/SkillInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
@@ -32,9 +34,14 @@ function ProfilePage() {
   const queryClient = useQueryClient();
 
   const [form, setForm] = useState({
+    persona: "student" as Persona,
     full_name: "",
     department: "",
     year_of_study: "",
+    company: "",
+    job_title: "",
+    institution: "",
+    research_focus: "",
     bio: "",
     weekly_hours: 10,
   });
@@ -43,9 +50,14 @@ function ProfilePage() {
   useEffect(() => {
     if (!profile) return;
     setForm({
+      persona: profile.persona ?? "student",
       full_name: profile.full_name ?? "",
       department: profile.department ?? "",
       year_of_study: profile.year_of_study ?? "",
+      company: profile.company ?? "",
+      job_title: profile.job_title ?? "",
+      institution: profile.institution ?? "",
+      research_focus: profile.research_focus ?? "",
       bio: profile.bio ?? "",
       weekly_hours: profile.weekly_hours ?? 10,
     });
@@ -85,6 +97,102 @@ function ProfilePage() {
           save.mutate();
         }}
       >
+        <div className="space-y-3">
+          <Label>I am a</Label>
+          <ToggleGroup
+            type="single"
+            variant="outline"
+            value={form.persona}
+            onValueChange={(value) => {
+              if (value) setForm({ ...form, persona: value as Persona });
+            }}
+            className="flex w-full flex-wrap justify-start gap-2"
+          >
+            <ToggleGroupItem value="student" className="flex-1 px-4 sm:flex-none">
+              Student
+            </ToggleGroupItem>
+            <ToggleGroupItem value="professional" className="flex-1 px-4 sm:flex-none">
+              Working Professional
+            </ToggleGroupItem>
+            <ToggleGroupItem value="researcher" className="flex-1 px-4 sm:flex-none">
+              Researcher
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {form.persona === "student" && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="department">Department</Label>
+                <Input
+                  id="department"
+                  placeholder="Computer Science"
+                  value={form.department}
+                  onChange={(e) => setForm({ ...form, department: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="year">Year of study</Label>
+                <Input
+                  id="year"
+                  placeholder="3rd year"
+                  value={form.year_of_study}
+                  onChange={(e) => setForm({ ...form, year_of_study: e.target.value })}
+                />
+              </div>
+            </>
+          )}
+
+          {form.persona === "professional" && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="company">Company / Organization</Label>
+                <Input
+                  id="company"
+                  placeholder="Acme Corp"
+                  value={form.company}
+                  onChange={(e) => setForm({ ...form, company: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="job_title">Current Role</Label>
+                <Input
+                  id="job_title"
+                  placeholder="Software Engineer"
+                  value={form.job_title}
+                  onChange={(e) => setForm({ ...form, job_title: e.target.value })}
+                />
+              </div>
+            </>
+          )}
+
+          {form.persona === "researcher" && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="institution">Institution</Label>
+                <Input
+                  id="institution"
+                  placeholder="MIT"
+                  value={form.institution}
+                  onChange={(e) => setForm({ ...form, institution: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="research_focus">Research Focus</Label>
+                <Input
+                  id="research_focus"
+                  placeholder="Machine learning, NLP"
+                  value={form.research_focus}
+                  onChange={(e) => setForm({ ...form, research_focus: e.target.value })}
+                />
+              </div>
+            </>
+          )}
+        </div>
+
+        <Separator />
+
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="full_name">Full name</Label>
@@ -93,24 +201,6 @@ function ProfilePage() {
               required
               value={form.full_name}
               onChange={(e) => setForm({ ...form, full_name: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="department">Department</Label>
-            <Input
-              id="department"
-              placeholder="Computer Science"
-              value={form.department}
-              onChange={(e) => setForm({ ...form, department: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="year">Year of study</Label>
-            <Input
-              id="year"
-              placeholder="3rd year"
-              value={form.year_of_study}
-              onChange={(e) => setForm({ ...form, year_of_study: e.target.value })}
             />
           </div>
           <div className="space-y-2">
