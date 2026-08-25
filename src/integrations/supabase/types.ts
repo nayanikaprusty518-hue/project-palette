@@ -14,13 +14,179 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      applications: {
+        Row: {
+          applicant_id: string
+          created_at: string
+          id: string
+          pitch_note: string | null
+          project_id: string
+          role_id: string
+          status: string
+        }
+        Insert: {
+          applicant_id: string
+          created_at?: string
+          id?: string
+          pitch_note?: string | null
+          project_id: string
+          role_id: string
+          status?: string
+        }
+        Update: {
+          applicant_id?: string
+          created_at?: string
+          id?: string
+          pitch_note?: string | null
+          project_id?: string
+          role_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_applicant_id_fkey"
+            columns: ["applicant_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "applications_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "applications_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          department: string | null
+          full_name: string
+          id: string
+          skills: string[]
+          weekly_hours: number
+          year_of_study: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          department?: string | null
+          full_name?: string
+          id: string
+          skills?: string[]
+          weekly_hours?: number
+          year_of_study?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          department?: string | null
+          full_name?: string
+          id?: string
+          skills?: string[]
+          weekly_hours?: number
+          year_of_study?: string | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string
+          deadline: string | null
+          description: string | null
+          domain: string
+          id: string
+          owner_id: string
+          tagline: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          domain: string
+          id?: string
+          owner_id: string
+          tagline?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          domain?: string
+          id?: string
+          owner_id?: string
+          tagline?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roles: {
+        Row: {
+          id: string
+          is_open: boolean
+          project_id: string
+          required_skills: string[]
+          role_name: string
+          slots_filled: number
+          slots_total: number
+        }
+        Insert: {
+          id?: string
+          is_open?: boolean
+          project_id: string
+          required_skills?: string[]
+          role_name: string
+          slots_filled?: number
+          slots_total?: number
+        }
+        Update: {
+          id?: string
+          is_open?: boolean
+          project_id?: string
+          required_skills?: string[]
+          role_name?: string
+          slots_filled?: number
+          slots_total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roles_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_project_owner: { Args: { _project_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
