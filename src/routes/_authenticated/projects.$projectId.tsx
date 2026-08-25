@@ -6,8 +6,8 @@ import { CalendarDays, CheckCircle2, Lock, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/useSession";
 import { useProfile } from "@/hooks/useProfile";
-import { matchScore, projectMatchScore } from "@/lib/match";
-import { MatchScore } from "@/components/MatchScore";
+import { computeMatchBreakdown, matchScore, projectMatchBreakdown } from "@/lib/match";
+import { MatchBreakdownBadge } from "@/components/MatchBreakdown";
 import { SkillRadar } from "@/components/SkillRadar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -121,6 +121,7 @@ function ProjectDetail() {
   const total = roles.reduce((n, r) => n + r.slots_total, 0);
   const isOwner = project.owner_id === user?.id;
   const appliedRoleIds = new Set((myApplications ?? []).map((a) => a.role_id));
+  const overallBreakdown = projectMatchBreakdown(profile ?? null, project.domain, roles);
 
   return (
     <div className="space-y-8">
@@ -133,7 +134,7 @@ function ProjectDetail() {
             <h1 className="text-3xl font-bold">{project.title}</h1>
             {project.tagline && <p className="mt-2 text-muted-foreground">{project.tagline}</p>}
           </div>
-          <MatchScore score={projectMatchScore(profile?.skills, roles)} label="overall match" />
+          <MatchBreakdownBadge breakdown={overallBreakdown} label="overall match" />
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
@@ -172,7 +173,12 @@ function ProjectDetail() {
         <h2 className="mb-4 text-xl font-semibold">Roles</h2>
         <div className="grid gap-4 md:grid-cols-2">
           {roles.map((role) => {
-            const score = matchScore(profile?.skills, role.required_skills);
+            const roleBreakdown = computeMatchBreakdown(
+              profile ?? null,
+              project.domain,
+              role.required_skills,
+              [role],
+            );
             const applied = appliedRoleIds.has(role.id);
             const seatsLeft = role.slots_total - role.slots_filled;
             return (
@@ -185,7 +191,7 @@ function ProjectDetail() {
                       {role.is_open ? ` · ${seatsLeft} open` : " · closed"}
                     </p>
                   </div>
-                  <MatchScore score={score} />
+                  <MatchBreakdownBadge breakdown={roleBreakdown} align="start" />
                 </div>
 
                 <div className="flex flex-wrap gap-1.5">

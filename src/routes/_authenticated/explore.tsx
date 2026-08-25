@@ -4,8 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Search, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useProfile";
-import { DOMAINS, projectMatchScore } from "@/lib/match";
-import { MatchBar, MatchScore } from "@/components/MatchScore";
+import { DOMAINS, projectMatchBreakdown } from "@/lib/match";
+import { MatchBar } from "@/components/MatchScore";
+import { MatchBreakdownBadge } from "@/components/MatchBreakdown";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -71,11 +72,14 @@ function Explore() {
   const filtered = useMemo(() => {
     const list = projects ?? [];
     return list
-      .map((p) => ({ p, score: projectMatchScore(profile?.skills, p.roles ?? []) }))
-      .filter(({ p, score }) => {
+      .map((p) => ({
+        p,
+        breakdown: projectMatchBreakdown(profile ?? null, p.domain, p.roles ?? []),
+      }))
+      .filter(({ p, breakdown }) => {
         if (domain && p.domain !== domain) return false;
         if (openOnly && !(p.roles ?? []).some((r) => r.is_open)) return false;
-        if (skillMatchOnly && score === 0) return false;
+        if (skillMatchOnly && breakdown.skillsMatch === 0) return false;
         if (search.trim()) {
           const q = search.toLowerCase();
           const hay = [p.title, p.tagline ?? "", p.domain, ...(p.roles ?? []).flatMap((r) => [r.role_name, ...r.required_skills])]
@@ -85,8 +89,8 @@ function Explore() {
         }
         return true;
       })
-      .sort((a, b) => b.score - a.score);
-  }, [projects, profile?.skills, domain, openOnly, skillMatchOnly, search]);
+      .sort((a, b) => b.breakdown.overall - a.breakdown.overall);
+  }, [projects, profile, domain, openOnly, skillMatchOnly, search]);
 
   return (
     <div className="space-y-8">
@@ -152,8 +156,8 @@ function Explore() {
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
-          {filtered.map(({ p, score }) => (
-            <ProjectCard key={p.id} project={p} score={score} />
+          {filtered.map(({ p, breakdown }) => (
+            <ProjectCard key={p.id} project={p} breakdown={breakdown} />
           ))}
         </div>
       )}
@@ -186,7 +190,13 @@ function FilterChip({
   );
 }
 
-function ProjectCard({ project, score }: { project: ProjectRow; score: number }) {
+function ProjectCard({
+  project,
+  breakdown,
+}: {
+  project: ProjectRow;
+  breakdown: ReturnType<typeof projectMatchBreakdown>;
+}) {
   const roles = project.roles ?? [];
   const missing = roles.filter((r) => r.is_open);
   const filled = roles.reduce((n, r) => n + r.slots_filled, 0);
@@ -208,7 +218,7 @@ function ProjectCard({ project, score }: { project: ProjectRow; score: number })
             <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{project.tagline}</p>
           )}
         </div>
-        <MatchScore score={score} />
+        <MatchBreakdownBadge breakdown={breakdown} />
       </div>
 
       <div>
@@ -225,7 +235,7 @@ function ProjectCard({ project, score }: { project: ProjectRow; score: number })
         </div>
       </div>
 
-      <MatchBar score={score} />
+      <MatchBar score={breakdown.overall} />
 
       <div className="flex items-center gap-4 text-xs text-muted-foreground">
         <span className="flex items-center gap-1.5">
