@@ -45,34 +45,34 @@ export function SkillRadar({
       <div className="mt-4 h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={data} outerRadius="72%">
-            <PolarGrid stroke="hsl(var(--border))" />
+            <PolarGrid stroke="var(--border)" />
             <PolarAngleAxis
               dataKey="skill"
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+              tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
             />
             <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
             <Tooltip
               contentStyle={{
-                background: "hsl(var(--popover))",
-                border: "1px solid hsl(var(--border))",
+                background: "var(--popover)",
+                border: "1px solid var(--border)",
                 borderRadius: 8,
                 fontSize: 12,
-                color: "hsl(var(--popover-foreground))",
+                color: "var(--popover-foreground)",
               }}
             />
             <Legend wrapperStyle={{ fontSize: 12 }} />
             <Radar
               name="Required"
               dataKey="required"
-              stroke="hsl(var(--muted-foreground))"
-              fill="hsl(var(--muted-foreground))"
+              stroke="var(--muted-foreground)"
+              fill="var(--muted-foreground)"
               fillOpacity={0.12}
             />
             <Radar
               name="You"
               dataKey="you"
-              stroke="hsl(var(--primary))"
-              fill="hsl(var(--primary))"
+              stroke="var(--primary)"
+              fill="var(--primary)"
               fillOpacity={0.35}
             />
           </RadarChart>
