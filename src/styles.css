@@ -5,8 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * ProjectMatch design system — sleek dark slate/indigo.
- * All colors are oklch semantic tokens. Never hardcode colors in components.
+ * ProjectMatch — Kanso-inspired warm editorial minimalism.
+ * Linen backgrounds, crisp white surfaces, sage olive accents.
+ * All colors are semantic tokens. Never hardcode colors in components.
  */
 
 @theme inline {
@@ -23,6 +24,7 @@
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -42,43 +44,44 @@
   --color-ring-offset-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-tag: var(--tag);
+  --color-tag-foreground: var(--tag-foreground);
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --shadow-elevate: 0 1px 0 0 oklch(1 0 0 / 6%) inset, 0 18px 40px -24px oklch(0 0 0 / 90%);
-  --shadow-glow: 0 0 0 1px oklch(0.62 0.19 275 / 35%), 0 18px 50px -20px oklch(0.62 0.19 275 / 45%);
+  --shadow-elevate: 0 1px 2px 0 rgb(31 36 30 / 0.04), 0 1px 3px 0 rgb(31 36 30 / 0.06);
+  --shadow-panel: 0 1px 2px 0 rgb(31 36 30 / 0.05);
 }
 
 :root {
-  --radius: 0.875rem;
-  --background: oklch(0.19 0.028 265);
-  --foreground: oklch(0.96 0.006 264);
-  --surface: oklch(0.235 0.03 265);
-  --surface-2: oklch(0.27 0.032 265);
-  --card: oklch(0.235 0.03 265);
-  --card-foreground: oklch(0.96 0.006 264);
-  --popover: oklch(0.235 0.03 265);
-  --popover-foreground: oklch(0.96 0.006 264);
-  --primary: oklch(0.62 0.19 275);
-  --primary-foreground: oklch(0.98 0.005 265);
-  --secondary: oklch(0.3 0.032 265);
-  --secondary-foreground: oklch(0.93 0.008 264);
-  --muted: oklch(0.28 0.03 265);
-  --muted-foreground: oklch(0.7 0.025 262);
-  --accent: oklch(0.33 0.05 272);
-  --accent-foreground: oklch(0.96 0.006 264);
-  --destructive: oklch(0.58 0.2 22);
-  --destructive-foreground: oklch(0.98 0.005 265);
-  --success: oklch(0.68 0.15 158);
-  --success-foreground: oklch(0.18 0.03 165);
-  --warning: oklch(0.78 0.14 80);
-  --warning-foreground: oklch(0.2 0.03 80);
-  --border: oklch(0.33 0.03 265);
-  --input: oklch(0.33 0.03 265);
-  --ring: oklch(0.62 0.19 275);
-}
-
-.dark {
-  color-scheme: dark;
+  --radius: 0.75rem;
+  --background: #f5f2eb;
+  --foreground: #1f241e;
+  --surface: #faf8f5;
+  --surface-2: #efece6;
+  --card: #ffffff;
+  --card-foreground: #1f241e;
+  --popover: #ffffff;
+  --popover-foreground: #1f241e;
+  --primary: #557a46;
+  --primary-hover: #3b5732;
+  --primary-foreground: #ffffff;
+  --secondary: #eae7df;
+  --secondary-foreground: #2e342b;
+  --muted: #efece6;
+  --muted-foreground: #6e6b64;
+  --accent: #eae7df;
+  --accent-foreground: #1f241e;
+  --tag: #eae7df;
+  --tag-foreground: #2e342b;
+  --destructive: #b54a4a;
+  --destructive-foreground: #ffffff;
+  --success: #557a46;
+  --success-foreground: #ffffff;
+  --warning: #a67c3d;
+  --warning-foreground: #1f241e;
+  --border: #e3ded4;
+  --input: #d8d3c8;
+  --ring: #557a46;
 }
 
 @layer base {
@@ -87,15 +90,11 @@
   }
 
   html {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   body {
     background-color: var(--color-background);
-    background-image:
-      radial-gradient(60rem 40rem at 12% -10%, oklch(0.62 0.19 275 / 16%), transparent 65%),
-      radial-gradient(50rem 36rem at 92% 0%, oklch(0.65 0.13 205 / 10%), transparent 60%);
-    background-attachment: fixed;
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -114,5 +113,5 @@
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-elevate);
+  box-shadow: var(--shadow-panel);
 }
