@@ -70,10 +70,15 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          company: string | null
           created_at: string
           department: string | null
           full_name: string
           id: string
+          institution: string | null
+          job_title: string | null
+          persona: string
+          research_focus: string | null
           skills: string[]
           weekly_hours: number
           year_of_study: string | null
@@ -81,10 +86,15 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          company?: string | null
           created_at?: string
           department?: string | null
           full_name?: string
           id: string
+          institution?: string | null
+          job_title?: string | null
+          persona?: string
+          research_focus?: string | null
           skills?: string[]
           weekly_hours?: number
           year_of_study?: string | null
@@ -92,10 +102,15 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          company?: string | null
           created_at?: string
           department?: string | null
           full_name?: string
           id?: string
+          institution?: string | null
+          job_title?: string | null
+          persona?: string
+          research_focus?: string | null
           skills?: string[]
           weekly_hours?: number
           year_of_study?: string | null
